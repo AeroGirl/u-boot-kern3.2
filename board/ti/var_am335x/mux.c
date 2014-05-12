@@ -41,7 +41,7 @@ static struct module_pin_mux uart3_pin_mux[] = {
 };
 
 static struct module_pin_mux gpio0_2_pin_mux[] = {
-	{OFFSET(spi0_sclk), MODE(7) | PULLUDEN},	   /* GPIO0_2, LCD Backlight */
+	{OFFSET(spi0_sclk), MODE(7) | PULLUP_EN | PULLUDEN},	   /* GPIO0_2, LCD Backlight */
 	{-1},
 };
 
