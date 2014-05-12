@@ -394,5 +394,5 @@
 #define CONFIG_ENV_OFFSET		0x260000 /* environment starts here */
 #define CONFIG_SYS_ENV_SECT_SIZE	(128 << 10)	/* 128 KiB */
 #endif
-#define CONFIG_VARISCITE_TOUCHSCREEN 1
+#undef CONFIG_VARISCITE_TOUCHSCREEN
 #endif	/* ! __CONFIG_VAR_AM335X_H */
