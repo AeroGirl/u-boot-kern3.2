@@ -110,6 +110,11 @@ static struct module_pin_mux mmc0_pin_mux[] = {
 	{-1},
 };
 
+static struct module_pin_mux led_matrix_pin_mux[] = {
+	{OFFSET(gpmc_a0), MODE(7) | PULLUDEN | PULLUP_EN},        /* GPIO0_16, LED Matrix nRST */
+	{-1},
+};
+
 void enable_uart0_pin_mux(void)
 {
 	configure_module_pin_mux(uart0_pin_mux);
@@ -142,4 +147,5 @@ void enable_board_pin_mux()
 	configure_module_pin_mux(gpio2_19_pin_mux);
 	configure_module_pin_mux(clkout_pin_mux);
 	configure_module_pin_mux(bt_uart_select_pin_mux);
+	configure_module_pin_mux(led_matrix_pin_mux);
 }

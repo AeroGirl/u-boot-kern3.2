@@ -61,7 +61,7 @@
 	"fdtaddr=0x80F80000\0" \
 	"fdt_high=0xffffffff\0" \
 	"rdaddr=0x81000000\0" \
-	"bootfile=uImage\0" \
+	"bootfile=uImage-NS\0" \
 	"fdtfile=\0" \
 	"console=ttyO0,115200n8\0" \
 	"optargs=\0" \
@@ -97,7 +97,7 @@
 		"root=/dev/nfs " \
 		"nfsroot=${serverip}:${rootpath},${nfsopts} rw " \
 		"ip=dhcp\0" \
-	"bootenv=uEnv.txt\0" \
+	"bootenv=uEnv-NS.txt\0" \
 	"loadbootenv=fatload mmc ${mmcdev} ${loadaddr} ${bootenv}\0" \
 	"importbootenv=echo Importing environment from mmc ...; " \
 		"env import -t $loadaddr $filesize\0" \
@@ -148,13 +148,14 @@
 			"run mmcboot;" \
 		"else " \
 			"echo Could not find ${bootfile} ;" \
+			"run nandboot;" \
 		"fi;" \
 	"fi;" 
 
 #define CONFIG_BOOTCOMMAND_NAND \
 		"run nandboot;"
 
-#define CONFIG_BOOTCOMMAND CONFIG_BOOTCOMMAND_NAND
+#define CONFIG_BOOTCOMMAND CONFIG_BOOTCOMMAND_MMC
 
 #else
 
