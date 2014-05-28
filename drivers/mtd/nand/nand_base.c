@@ -2616,30 +2616,6 @@ static const struct nand_flash_dev *nand_get_flash_type(struct mtd_info *mtd,
 	 */
 	chip->cmdfunc(mtd, NAND_CMD_RESET, -1, -1);
 
-  /* Read Unique ID */
-
-  /* Send the command for reading unique ID */
-  chip->cmdfunc(mtd, NAND_CMD_READ_UNIQUE_ID, 0x00, -1);
-
-  /* Read unique ID and shadow ID */
-  uint8_t unique_shadow[16];
-  int unique_attempts = 0, unique_index = 0;
-  do {
-    for (unique_index = 0; unique_index < 16; unique_index++) {
-      chip->unique_id[unique_index] = chip->read_byte(mtd);
-    }
-
-    for (unique_index = 0; unique_index < 16; unique_index++) {
-      unique_shadow[unique_index] = chip->read_byte(mtd);
-      if (chip->unique_id[unique_index] ^ unique_shadow[unique_index] != 0xff) {
-        // invalid shadow byte
-        break;
-      }
-    }
-
-    unique_attempts++;
-  } while (unique_index != 16 && unique_attempts < 10);
-
 	/* Send the command for reading device ID */
 	chip->cmdfunc(mtd, NAND_CMD_READID, 0x00, -1);
 
@@ -2882,6 +2858,36 @@ ident_done:
 	MTDDEBUG(MTD_DEBUG_LEVEL0, "NAND device: Manufacturer ID:"
 		 " 0x%02x, Chip ID: 0x%02x (%s %s)\n", *maf_id, *dev_id,
 		 nand_manuf_ids[maf_idx].name, name);
+
+  /* Read Unique ID */
+
+  /* Send the command for reading unique ID */
+  chip->cmdfunc(mtd, NAND_CMD_READ_UNIQUE_ID, 0x00, -1);
+
+  /* Read unique ID and shadow ID */
+  uint8_t unique_shadow[16];
+  int unique_attempts = 0, unique_index = 0;
+  do {
+    printk(KERN_WARNING "ID: ");
+    for (unique_index = 0; unique_index < 16; unique_index++) {
+      chip->unique_id[unique_index] = chip->read_byte(mtd);
+      printk(KERN_WARNING "%02x", chip->unique_id[unique_index]);
+    }
+    printk(KERN_WARNING "\n");
+    printk(KERN_WARNING "SID: ");
+    for (unique_index = 0; unique_index < 16; unique_index++) {
+      unique_shadow[unique_index] = chip->read_byte(mtd);
+      printk(KERN_WARNING "%02x", unique_shadow[unique_index]);
+      if (chip->unique_id[unique_index] ^ unique_shadow[unique_index] != 0xff) {
+        // invalid shadow byte
+        printk(KERN_WARNING "\n");
+        break;
+      }
+    }
+    printk(KERN_WARNING "\n");
+
+    unique_attempts++;
+  } while (unique_index != 16 && unique_attempts < 10);
 
 	return type;
 }
