@@ -2865,7 +2865,7 @@ ident_done:
   chip->cmdfunc(mtd, NAND_CMD_READ_UNIQUE_ID, 0x00, -1);
 
   /* Read unique ID and shadow ID */
-  uint8_t unique_shadow[16];
+  uint8_t unique_shadow[16], checksum;
   int unique_attempts = 0, unique_index = 0;
   do {
     printk(KERN_WARNING "ID: ");
@@ -2877,8 +2877,9 @@ ident_done:
     printk(KERN_WARNING "SID: ");
     for (unique_index = 0; unique_index < 16; unique_index++) {
       unique_shadow[unique_index] = chip->read_byte(mtd);
-      printk(KERN_WARNING "%02x ^ %02x = %02x\n", chip->unique_id[unique_index], unique_shadow[unique_index], chip->unique_id[unique_index] ^ unique_shadow[unique_index]);
-      if (chip->unique_id[unique_index] ^ unique_shadow[unique_index] != 0xff) {
+      checksum = (chip->unique_id[unique_index] ^ unique_shadow[unique_index]);
+      printk(KERN_WARNING "%02x ^ %02x = %02x (%d)\n", chip->unique_id[unique_index], unique_shadow[unique_index], checksum, checksum != 0xff);
+      if (checksum != 0xff) {
         // invalid shadow byte
         printk(KERN_WARNING "\n");
         break;
