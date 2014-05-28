@@ -513,7 +513,7 @@ static int do_nand(cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[])
     printf("Unique ID: ");
     for (i = 0; i < 16; i++) {
       printf("%02x ", chip->unique_id[i]);
-      sprintf(buf[2*i], "%02x", chip->unique_id[i]);
+      sprintf(&buf[2*i], "%02x", chip->unique_id[i]);
     }
     putc('\n');
 
