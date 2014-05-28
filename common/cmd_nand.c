@@ -507,13 +507,17 @@ static int do_nand(cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[])
 
   if (strcmp(cmd, "uid") == 0) {
     struct nand_chip *chip = nand->priv;
+    char buf[32 + 1];
 
     putc('\n');
     printf("Unique ID: ");
     for (i = 0; i < 16; i++) {
       printf("%02x ", chip->unique_id[i]);
+      sprintf(buf[2*i], "%02x", chip->unique_id[i]);
     }
     putc('\n');
+
+    setenv("uniqueid", buf);
 
     return 0;
   }
