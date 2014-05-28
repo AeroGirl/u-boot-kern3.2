@@ -470,6 +470,17 @@ static int do_nand(cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[])
 		return 0;
 	}
 
+  if (strcmp(cmd, "uid") == 0) {
+    struct nand_chip *chip = nand->priv;
+
+    putc('\n');
+    printf("Unique ID: ");
+    for (int i = 0; i < 16; i++) {
+      printf("%02x ", chip->unique_id[i]);
+    }
+    putc('\n');
+  }
+
 	if (strcmp(cmd, "device") == 0) {
 		if (argc < 3) {
 			putc('\n');
