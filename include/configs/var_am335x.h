@@ -86,6 +86,7 @@
 		"${optargs}\0" \
 	"mmcargs=run bootargs_defaults;" \
 		"setenv bootargs ${bootargs} " \
+    "hwserial=${uniqueid} " \
 		"root=${mmcroot} " \
 		"rootfstype=${mmcrootfstype} ip=${ip_method}\0" \
 	"nandargs=setenv bootargs console=${console} " \
@@ -132,7 +133,7 @@
 
 #ifndef CONFIG_RESTORE_FLASH
 #define CONFIG_BOOTCOMMAND_MMC \
-	"mmc dev ${mmcdev}; if mmc rescan; then " \
+	"nand uid; mmc dev ${mmcdev}; if mmc rescan; then " \
 		"echo SD/MMC found on device ${mmcdev};" \
 		"if run loadbootenv; then " \
 			"echo Loaded environment from ${bootenv};" \
@@ -150,7 +151,7 @@
 			"echo Could not find ${bootfile} ;" \
 			"run nandboot;" \
 		"fi;" \
-	"fi;" 
+	"fi;"
 
 #define CONFIG_BOOTCOMMAND_NAND \
 		"run nandboot;"
